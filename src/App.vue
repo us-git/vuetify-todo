@@ -26,11 +26,10 @@
 
     <v-app-bar
       app
-      color="#fcb69f"
+      color="primary"
       dark
-      shrink-on-scroll
-      src="https://picsum.photos/1920/1080?random"
-      scroll-target="#scrolling-techniques-2"
+      prominent
+      src="mountains.png"
     >
       <template v-slot:img="{ props }">
         <v-img
