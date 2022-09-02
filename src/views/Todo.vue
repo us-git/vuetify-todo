@@ -76,11 +76,6 @@ export default {
           title: "Get bananas",
           done: false,
         },
-        {
-          id: 3,
-          title: "Eat bananas",
-          done: false,
-        },
       ],
     };
   },
