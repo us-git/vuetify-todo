@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <v-text-field
+    <v-text-field
       v-model="newTaskTitle"
       outlined
       label="Add task"
@@ -10,52 +10,41 @@
       clearable
       @click:append="addTask"
       @keyup.enter="addTask"
-  >
-  </v-text-field>
-    <v-list 
-      flat
-      class="pt-0"
-      v-if="tasks.length"
     >
-  
-
-    <div v-for="task in tasks" :key="task.id" >
-      <v-list-item @click="doneTask(task.id)" :class="{ 'orange lighten-5' : task.done }">
-          <template>
-          <!-- <template v-slot:default="{ active, }"> -->
+    </v-text-field>
+    <v-list flat class="pt-0" v-if="$store.state.tasks.length">
+      <div v-for="task in $store.state.tasks" :key="task.id">
+        <v-list-item
+          item
+          :class="{ 'orange lighten-5': task.done }"
+          @click="$store.commit('doneTask', task.id)"
+        >
+          <!-- <template> -->
+          <template v-slot:default="{ active }">
             <v-list-item-action>
-              <v-checkbox
-                :input-value="task.done"
-                color="primary"
-              ></v-checkbox>
+              <v-checkbox :input-value="task.done" color="primary"></v-checkbox>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title :class="{ 'text-decoration-line-through' : task.done }">{{ task.title }}</v-list-item-title>
+              <v-list-item-title
+                :class="{ 'text-decoration-line-through': task.done }"
+                >{{ task.title }}</v-list-item-title
+              >
             </v-list-item-content>
 
             <v-list-item-action>
-          <v-btn icon @click.stop="deleteTask(task.id)">
-            <v-icon color="primary lighten-1">mdi-delete</v-icon>
-          </v-btn>
-        </v-list-item-action>
+              <v-btn icon @click.stop="deleteTask(task.id)">
+                <v-icon color="primary lighten-1">mdi-delete</v-icon>
+              </v-btn>
+            </v-list-item-action>
           </template>
-
-          
-      </v-list-item>
-      
         </v-list-item>
         <v-divider></v-divider>
-    </div>
-</v-list>
+      </div>
+    </v-list>
     <div v-else class="no-tasks">
-      <v-icon
-        size="100px"
-        color="primary"
-      >mdi-check</v-icon>
+      <v-icon size="100px" color="primary">mdi-check</v-icon>
       <div class="text-h5 primary--text">No tasks</div>
     </div>
-        
-    
   </div>
 </template>
 
@@ -65,46 +54,26 @@ export default {
   data() {
     return {
       newTaskTitle: "Add task",
-      tasks: [
-        {
-          id: 1,
-          title: "Wake up",
-          done: false,
-        },
-        {
-          id: 2,
-          title: "Get bananas",
-          done: false,
-        },
-      ],
     };
   },
   methods: {
     addTask() {
-      let newTask = {
-        id: Date.now(),
-        title: this.newTaskTitle,
-        done: false,
-      };
-      this.tasks.push(newTask);
+      this.$store.commit("addTask", this.newTaskTitle);
       this.newTaskTitle = "";
     },
-    doneTask(id) {
-      let task = this.tasks.filter((task) => task.id === id)[0];
-      task.done = !task.done;
-    },
     deleteTask(id) {
-      this.tasks = this.tasks.filter((task) => task.id !== id);
+      this.$store.commit('deleteTask',id);
+      console.log(id);
     },
   },
 };
 </script>
 
 <style lang="sass">
-  .no-tasks
-    position: absolute
-    left: 50%
-    top: 50%
-    transform: translate(-50%, -50%)
-    opacity: 0.5
+.no-tasks
+  position: absolute
+  left: 50%
+  top: 50%
+  transform: translate(-50%, -50%)
+  opacity: 0.5
 </style>
